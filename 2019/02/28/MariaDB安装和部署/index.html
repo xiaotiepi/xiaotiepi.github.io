@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>MariaDB安装和部署 | 嘟嘟嘟嘟嘟</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="数据库">
+    <meta name="description" content="“””    MariaDB是MySQL的分支最大的特点就是采用XtraDB存储引擎，并和原生版本兼容，    保留了Mysql的自由开放，XtraDB是Percona开发的高性能存储引擎，主要是为了替代InnoDB.    除了XtraDB引擎，后起之秀TokuDB支持高性能、事务处理的存储引擎，性能比InnoDB高出很多，    超高的insert性能、高压缩比、支持在线修改索引、添加字段。安">
+<meta name="keywords" content="数据库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MariaDB安装和部署">
+<meta property="og:url" content="http://yoursite.com/2019/02/28/MariaDB安装和部署/index.html">
+<meta property="og:site_name" content="嘟嘟嘟嘟嘟">
+<meta property="og:description" content="“””    MariaDB是MySQL的分支最大的特点就是采用XtraDB存储引擎，并和原生版本兼容，    保留了Mysql的自由开放，XtraDB是Percona开发的高性能存储引擎，主要是为了替代InnoDB.    除了XtraDB引擎，后起之秀TokuDB支持高性能、事务处理的存储引擎，性能比InnoDB高出很多，    超高的insert性能、高压缩比、支持在线修改索引、添加字段。安">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-02-28T09:53:42.237Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MariaDB安装和部署">
+<meta name="twitter:description" content="“””    MariaDB是MySQL的分支最大的特点就是采用XtraDB存储引擎，并和原生版本兼容，    保留了Mysql的自由开放，XtraDB是Percona开发的高性能存储引擎，主要是为了替代InnoDB.    除了XtraDB引擎，后起之秀TokuDB支持高性能、事务处理的存储引擎，性能比InnoDB高出很多，    超高的insert性能、高压缩比、支持在线修改索引、添加字段。安">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Xiaotiepi</h5>
+          <a href="mailto:438252548@qq.com" title="438252548@qq.com" class="mail">438252548@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/">
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives">
+                <i class="icon icon-lg icon-archives"></i>
+                文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags">
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories">
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/yscoder" target="_blank">
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://www.weibo.com/ysweb" target="_blank">
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">MariaDB安装和部署</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">MariaDB安装和部署</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-02-28T09:50:40.000Z" itemprop="datePublished" class="page-time">
+  2019-02-28
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#终端提示和输入："><span class="post-toc-number">1.</span> <span class="post-toc-text">终端提示和输入：</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#设置root密码"><span class="post-toc-number">2.</span> <span class="post-toc-text">设置root密码</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#设置密码"><span class="post-toc-number">3.</span> <span class="post-toc-text">设置密码</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#其他配置"><span class="post-toc-number">4.</span> <span class="post-toc-text">其他配置</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#启动数据库"><span class="post-toc-number">5.</span> <span class="post-toc-text">启动数据库</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#查看数据库服务状态（MariaDB与其他Mysql数据库不能共存在同一操作系统）"><span class="post-toc-number">6.</span> <span class="post-toc-text">查看数据库服务状态（MariaDB与其他Mysql数据库不能共存在同一操作系统）</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#设置mysql随系统服务启动"><span class="post-toc-number">7.</span> <span class="post-toc-text">设置mysql随系统服务启动</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#撤销随系统服务启动"><span class="post-toc-number">8.</span> <span class="post-toc-text">撤销随系统服务启动</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#重启数据库服务，使配置生效"><span class="post-toc-number">9.</span> <span class="post-toc-text">重启数据库服务，使配置生效</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Instead-of-skip-networking-the-default-is-now-to-listen-only-on"><span class="post-toc-number">10.</span> <span class="post-toc-text">Instead of skip-networking the default is now to listen only on</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#localhost-which-is-more-compatible-and-is-not-less-secure"><span class="post-toc-number">11.</span> <span class="post-toc-text">localhost which is more compatible and is not less secure.</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#或者注释掉这一行"><span class="post-toc-number">12.</span> <span class="post-toc-text">或者注释掉这一行</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#授予用户权限"><span class="post-toc-number">13.</span> <span class="post-toc-text">授予用户权限</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#在使用Grant命令授权用户后，应该要使用flush-privileges命令刷新权限列表"><span class="post-toc-number">14.</span> <span class="post-toc-text">在使用Grant命令授权用户后，应该要使用flush privileges命令刷新权限列表</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#查看用户权限"><span class="post-toc-number">15.</span> <span class="post-toc-text">查看用户权限</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#更改用户权限"><span class="post-toc-number">16.</span> <span class="post-toc-text">更改用户权限</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#上面的语句将账户-‘yangfan’-’127-0-0-1’-的权限更改为，只有对数据库-test-及其里面所有对象进行-SELECT、INSERT-和-UPDATE-操作的权限。"><span class="post-toc-number">17.</span> <span class="post-toc-text">上面的语句将账户 ‘yangfan’@’127.0.0.1’ 的权限更改为，只有对数据库 test 及其里面所有对象进行 SELECT、INSERT 和 UPDATE 操作的权限。</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#查看结果"><span class="post-toc-number">18.</span> <span class="post-toc-text">查看结果</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#撤销用户权限"><span class="post-toc-number">19.</span> <span class="post-toc-text">撤销用户权限</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#撤销用户授权用-REVOKE-语句，下面是-REVOKE-语句的语法："><span class="post-toc-number">20.</span> <span class="post-toc-text">撤销用户授权用 REVOKE 语句，下面是 REVOKE 语句的语法：</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#之前我们将全部权限授予账户-‘yangfan’-’localhost’，-现在我们对该账户进行权限的删除："><span class="post-toc-number">21.</span> <span class="post-toc-text">之前我们将全部权限授予账户 ‘yangfan’@’localhost’， 现在我们对该账户进行权限的删除：</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#上面语句可以把账户-‘yangfan’-’localhost’-对数据库-test-的权限全部删除。"><span class="post-toc-number">22.</span> <span class="post-toc-text">上面语句可以把账户 ‘yangfan’@’localhost’ 对数据库 test 的权限全部删除。</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#查看结果："><span class="post-toc-number">23.</span> <span class="post-toc-text">查看结果：</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#注意：USAGE-便是下文提到的“无权限”的权限。"><span class="post-toc-number">24.</span> <span class="post-toc-text">注意：USAGE 便是下文提到的“无权限”的权限。</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#我们再删除账户-‘yangfan’-’127-0-0-1’-的-INSERT-和-UPDATE-的权限："><span class="post-toc-number">25.</span> <span class="post-toc-text">我们再删除账户 ‘yangfan’@’127.0.0.1’ 的 INSERT 和 UPDATE 的权限：</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#查看结果：-1"><span class="post-toc-number">26.</span> <span class="post-toc-text">查看结果：</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#可以看到现在‘yangfan‘-’127-0-0-1’这个用户只有SELECT权限"><span class="post-toc-number">27.</span> <span class="post-toc-text">可以看到现在‘yangfan‘@’127.0.0.1’这个用户只有SELECT权限</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#查看字符集"><span class="post-toc-number">28.</span> <span class="post-toc-text">查看字符集</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#修改字符集配置"><span class="post-toc-number">29.</span> <span class="post-toc-text">修改字符集配置</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#设置客户端："><span class="post-toc-number">30.</span> <span class="post-toc-text">设置客户端：</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#进入数据库查看修改结果"><span class="post-toc-number">31.</span> <span class="post-toc-text">进入数据库查看修改结果</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#设置服务端"><span class="post-toc-number">32.</span> <span class="post-toc-text">设置服务端</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#创建数据库的时候指定编码格式"><span class="post-toc-number">33.</span> <span class="post-toc-text">创建数据库的时候指定编码格式</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#创建表的时候指定编码格式"><span class="post-toc-number">34.</span> <span class="post-toc-text">创建表的时候指定编码格式</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#对已经创建完成的表或者数据库通过ALTER进行修改"><span class="post-toc-number">35.</span> <span class="post-toc-text">对已经创建完成的表或者数据库通过ALTER进行修改</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#修改某一个数据库"><span class="post-toc-number">36.</span> <span class="post-toc-text">修改某一个数据库</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#修改某一个表"><span class="post-toc-number">37.</span> <span class="post-toc-text">修改某一个表</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#对单个编码设置进行设置，如：character-set-database"><span class="post-toc-number">38.</span> <span class="post-toc-text">对单个编码设置进行设置，如：character_set_database</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-MariaDB安装和部署" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">MariaDB安装和部署</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-02-28 17:50:40" datetime="2019-02-28T09:50:40.000Z" itemprop="datePublished">2019-02-28</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style="display:none">
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>“””<br>    MariaDB是MySQL的分支最大的特点就是采用XtraDB存储引擎，并和原生版本兼容，<br>    保留了Mysql的自由开放，XtraDB是Percona开发的高性能存储引擎，主要是为了替代InnoDB.<br>    除了XtraDB引擎，后起之秀TokuDB支持高性能、事务处理的存储引擎，性能比InnoDB高出很多，<br>    超高的insert性能、高压缩比、支持在线修改索引、添加字段。安装时Mysql、MariaDB、Percona Server 不能共存，<br>    要部署MariaDB就必须卸载另外两个。否则出现“mysql service masked”错误。<br>“””</p>
+<hr>
+<p>安装MariaDB数据库(Debian系列系统适用，包括Ubuntu和Deepin)<br>$ sudo aptitude install -y mariadb-server mariadb-client</p>
+<hr>
+<p>安装数据库实例<br>$ sudo mysql_secure_installation</p>
+<h1 id="终端提示和输入："><a href="#终端提示和输入：" class="headerlink" title="终端提示和输入："></a>终端提示和输入：</h1><h1 id="设置root密码"><a href="#设置root密码" class="headerlink" title="设置root密码"></a>设置root密码</h1><p>Enter current password for root (enter for none): &lt;–初次运行直接回车</p>
+<h1 id="设置密码"><a href="#设置密码" class="headerlink" title="设置密码"></a>设置密码</h1><p>Set root password? [Y/n] &lt;– 是否设置root用户密码，输入Y并回车或直接回车<br>New password: &lt;– 设置root用户的密码<br>Re-enter new password: &lt;– 再输入一次你设置的密码</p>
+<h1 id="其他配置"><a href="#其他配置" class="headerlink" title="其他配置"></a>其他配置</h1><p>Remove anonymous users? [Y/n] &lt;– 是否删除匿名用户，Y<br>Disallow root login remotely? [Y/n] &lt;–是否禁止root远程登录,n<br>Remove test database and access to it? [Y/n] &lt;– 是否删除test数据库，Y<br>Reload privilege tables now? [Y/n] &lt;– 是否重新加载权限表，Y</p>
+<p>数据库设置相关操作</p>
+<h1 id="启动数据库"><a href="#启动数据库" class="headerlink" title="启动数据库"></a>启动数据库</h1><p>$ sudo systemctl start mysql</p>
+<h1 id="查看数据库服务状态（MariaDB与其他Mysql数据库不能共存在同一操作系统）"><a href="#查看数据库服务状态（MariaDB与其他Mysql数据库不能共存在同一操作系统）" class="headerlink" title="查看数据库服务状态（MariaDB与其他Mysql数据库不能共存在同一操作系统）"></a>查看数据库服务状态（MariaDB与其他Mysql数据库不能共存在同一操作系统）</h1><p>$ sudo systemctl status mysql</p>
+<h1 id="设置mysql随系统服务启动"><a href="#设置mysql随系统服务启动" class="headerlink" title="设置mysql随系统服务启动"></a>设置mysql随系统服务启动</h1><p>$ sudo update-rc.d  mysql defaults</p>
+<h1 id="撤销随系统服务启动"><a href="#撤销随系统服务启动" class="headerlink" title="撤销随系统服务启动"></a>撤销随系统服务启动</h1><p>$ sudo update-rc.d  -f mysql remove</p>
+<h1 id="重启数据库服务，使配置生效"><a href="#重启数据库服务，使配置生效" class="headerlink" title="重启数据库服务，使配置生效"></a>重启数据库服务，使配置生效</h1><p>$ sudo systemctl restart mysql</p>
+<p>初始化完成MariaDB后,就可以测试登录了<br>”“” 之前版本mysql不同，需要获得操作系统管理员权限，才能登录MariaDB的root用户<br>    普通操作系统用户不能登录MariaDB数据库root用户 “”“<br>$ sudo mysql -u root -p</p>
+<p>创建普通数据库用户 （登录普通数据库用户则不需要获得操作系统管理员权限）<br>MariaDB [(none)]&gt; create user ‘user_name‘@’host_name’ identified by ‘password’;</p>
+<p>“””CREATE USER 等账户管理语句中的账户由一个用户名和一个主机名组成，其格式为‘user_name’@’host_name’。<br>    主机部分是指客户从哪些主机去连接服务器。如若限制某个用户从指定的主机连接 MariaDB 服务:</p>
+<pre><code>MariaDB [(none)]&gt; CREATE USER &apos;yangfan&apos;@&apos;localhost&apos; IDENTIFIED BY &apos;password&apos;;
+MariaDB [(none)]&gt; CREATE USER &apos;yangfan&apos;@&apos;169.254.195.91&apos; IDENTIFIED BY &apos;password&apos;;
+第一条语句，创建一个名为 yangfan 的用户，并限制其只可从本机进行连接操作；
+第二条语句，创建一个名为 yangfan 的用户，并限制其只可从 ip 169.254.195.91 的客户机上连接服务。
+虽然用户名相同，实际上，他们并不是同一个账户，其对应的权限也可能不尽相同。
+
+当然很多情况下并不需要严格要求用户只能从一台主机连接服务器。这个时候就可以用上通配符：
+
+MariaDB [(none)]&gt; CREATE USER &apos;yangfan&apos;@&apos;169.254.195.%&apos; IDENTIFIED BY &apos;yangfan&apos;;
+MariaDB [(none)]&gt; CREATE USER &apos;yangfan&apos;@&apos;%.yangfanweb.cn&apos; IDENTIFIED BY &apos;yangfan&apos;;
+MariaDB [(none)]&gt; CREATE USER &apos;yangfan&apos;@&apos;%&apos; IDENTIFIED BY &apos;yangfan&apos;;
+SQL 中 LIKE 的通配符 % 及 -，在此都可使用。如若使用 “%” 或 “-” 本身，则需使用 “\” 对其转义。
+
+上面第一条语句创建一个名为 yangfan 的用户，并允许其在 169.254.195.* ip 段下的所有主机连接服务器；
+第二条语句创建一个名为 yangfan 的用户，并允许其能够从 yangfanweb.cn 域中的任意一台主机连接服务器；
+第三条语句创建了一个名为 yangfan 的用户，并允许其可从任意一台主机来连接服务器。（第三种方式最为方便，但对系统最不安全。）
+</code></pre><p>“””</p>
+<p>删除数据库用户<br>MariaDB [(none)]&gt; drop user 用户名@’%’;</p>
+<p>修改MariaDB配置文件，监听外网访问(需要重启服务才可以生效)<br>$ sudo vim /etc/mysql/mariadb.conf.d/50-server.cnf </p>
+<h1 id="Instead-of-skip-networking-the-default-is-now-to-listen-only-on"><a href="#Instead-of-skip-networking-the-default-is-now-to-listen-only-on" class="headerlink" title="Instead of skip-networking the default is now to listen only on"></a>Instead of skip-networking the default is now to listen only on</h1><h1 id="localhost-which-is-more-compatible-and-is-not-less-secure"><a href="#localhost-which-is-more-compatible-and-is-not-less-secure" class="headerlink" title="localhost which is more compatible and is not less secure."></a>localhost which is more compatible and is not less secure.</h1><p>bind-address        = 0.0.0.0</p>
+<h1 id="或者注释掉这一行"><a href="#或者注释掉这一行" class="headerlink" title="或者注释掉这一行"></a>或者注释掉这一行</h1><p>#bind-address       = 127.0.0.1 </p>
+<p>登录远程数据库(需要username@’%’)<br>$ mysql -h host_name -u user_name -p password</p>
+<p>数据库用户权限操作</p>
+<h1 id="授予用户权限"><a href="#授予用户权限" class="headerlink" title="授予用户权限"></a>授予用户权限</h1><p>MariaDB [(none)]&gt; GRANT ALL ON test.* TO ‘yangfan‘@’localhost’ WITH GRANT OPTION;<br>“”” 上面语句将数据库test及其里面所有对象的所有权限授权于账户 ‘yangfan’@’localhost’<br>    要想把权限授予其他用户，首先发出授权的用户必须具备该权限，而且必须具备 GRANT OPTION 权限。<br>    MariaDB 允许在数据库系统全局、数据库、数据表、数据列等多种级别上进行授权。权限级别由 ON 子句控制。<br>“””</p>
+<h1 id="在使用Grant命令授权用户后，应该要使用flush-privileges命令刷新权限列表"><a href="#在使用Grant命令授权用户后，应该要使用flush-privileges命令刷新权限列表" class="headerlink" title="在使用Grant命令授权用户后，应该要使用flush privileges命令刷新权限列表"></a>在使用Grant命令授权用户后，应该要使用flush privileges命令刷新权限列表</h1><h1 id="查看用户权限"><a href="#查看用户权限" class="headerlink" title="查看用户权限"></a>查看用户权限</h1><p>MariaDB [(none)]&gt; SHOW GRANTS FOR ‘yangfan‘@’localhost’;<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+----------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Grants <span class="keyword">for</span> yangfan@localhost                                                                                   |</span><br><span class="line">+----------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| GRANT USAGE ON *.* TO <span class="string">'yangfan'</span>@<span class="string">'localhost'</span> IDENTIFIED BY PASSWORD <span class="string">'*F6131BD316F9043F5FE0E5B95F5713D6F86A157F'</span> |</span><br><span class="line">| GRANT ALL PRIVILEGES ON `<span class="built_in">test</span>`.* TO <span class="string">'yangfan'</span>@<span class="string">'localhost'</span> WITH GRANT OPTION                                    |</span><br><span class="line">+----------------------------------------------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure></p>
+<h1 id="更改用户权限"><a href="#更改用户权限" class="headerlink" title="更改用户权限"></a>更改用户权限</h1><p>MariaDB [(none)]&gt; GRANT SELECT,INSERT,UPDATE ON test.* TO ‘yangfan‘@’127.0.0.1’;</p>
+<h1 id="上面的语句将账户-‘yangfan’-’127-0-0-1’-的权限更改为，只有对数据库-test-及其里面所有对象进行-SELECT、INSERT-和-UPDATE-操作的权限。"><a href="#上面的语句将账户-‘yangfan’-’127-0-0-1’-的权限更改为，只有对数据库-test-及其里面所有对象进行-SELECT、INSERT-和-UPDATE-操作的权限。" class="headerlink" title="上面的语句将账户 ‘yangfan’@’127.0.0.1’ 的权限更改为，只有对数据库 test 及其里面所有对象进行 SELECT、INSERT 和 UPDATE 操作的权限。"></a>上面的语句将账户 ‘yangfan’@’127.0.0.1’ 的权限更改为，只有对数据库 test 及其里面所有对象进行 SELECT、INSERT 和 UPDATE 操作的权限。</h1><h1 id="查看结果"><a href="#查看结果" class="headerlink" title="查看结果"></a>查看结果</h1><p>MariaDB [(none)]&gt; SHOW GRANTS FOR ‘yangfan‘@’127.0.0.1’;<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+----------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Grants <span class="keyword">for</span> yangfan@127.0.0.1                                                                                   |</span><br><span class="line">+----------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| GRANT USAGE ON *.* TO <span class="string">'yangfan'</span>@<span class="string">'127.0.0.1'</span> IDENTIFIED BY PASSWORD <span class="string">'*F6131BD316F9043F5FE0E5B95F5713D6F86A157F'</span> |</span><br><span class="line">| GRANT SELECT, INSERT, UPDATE ON `<span class="built_in">test</span>`.* TO <span class="string">'yangfan'</span>@<span class="string">'127.0.0.1'</span>                                              |</span><br><span class="line">+----------------------------------------------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure></p>
+<h1 id="撤销用户权限"><a href="#撤销用户权限" class="headerlink" title="撤销用户权限"></a>撤销用户权限</h1><h1 id="撤销用户授权用-REVOKE-语句，下面是-REVOKE-语句的语法："><a href="#撤销用户授权用-REVOKE-语句，下面是-REVOKE-语句的语法：" class="headerlink" title="撤销用户授权用 REVOKE 语句，下面是 REVOKE 语句的语法："></a>撤销用户授权用 REVOKE 语句，下面是 REVOKE 语句的语法：</h1><p>REVOKE preivileges [ columns ] ON what FROM account;</p>
+<h1 id="之前我们将全部权限授予账户-‘yangfan’-’localhost’，-现在我们对该账户进行权限的删除："><a href="#之前我们将全部权限授予账户-‘yangfan’-’localhost’，-现在我们对该账户进行权限的删除：" class="headerlink" title="之前我们将全部权限授予账户 ‘yangfan’@’localhost’， 现在我们对该账户进行权限的删除："></a>之前我们将全部权限授予账户 ‘yangfan’@’localhost’， 现在我们对该账户进行权限的删除：</h1><p>MariaDB [(none)]&gt; REVOKE ALL ON test.* FROM ‘yangfan‘@’localhost’;</p>
+<h1 id="上面语句可以把账户-‘yangfan’-’localhost’-对数据库-test-的权限全部删除。"><a href="#上面语句可以把账户-‘yangfan’-’localhost’-对数据库-test-的权限全部删除。" class="headerlink" title="上面语句可以把账户 ‘yangfan’@’localhost’ 对数据库 test 的权限全部删除。"></a>上面语句可以把账户 ‘yangfan’@’localhost’ 对数据库 test 的权限全部删除。</h1><h1 id="查看结果："><a href="#查看结果：" class="headerlink" title="查看结果："></a>查看结果：</h1><p>MariaDB [(none)]&gt; SHOW GRANTS FOR ‘yangfan‘@’localhost’;<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+----------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Grants <span class="keyword">for</span> yangfan@localhost                                                                                   |</span><br><span class="line">+----------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| GRANT USAGE ON *.* TO <span class="string">'yangfan'</span>@<span class="string">'localhost'</span> IDENTIFIED BY PASSWORD <span class="string">'*F6131BD316F9043F5FE0E5B95F5713D6F86A157F'</span> |</span><br><span class="line">| GRANT USAGE ON `<span class="built_in">test</span>`.* TO <span class="string">'yangfan'</span>@<span class="string">'localhost'</span> WITH GRANT OPTION                                             |</span><br><span class="line">+----------------------------------------------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure></p>
+<h1 id="注意：USAGE-便是下文提到的“无权限”的权限。"><a href="#注意：USAGE-便是下文提到的“无权限”的权限。" class="headerlink" title="注意：USAGE 便是下文提到的“无权限”的权限。"></a>注意：USAGE 便是下文提到的“无权限”的权限。</h1><h1 id="我们再删除账户-‘yangfan’-’127-0-0-1’-的-INSERT-和-UPDATE-的权限："><a href="#我们再删除账户-‘yangfan’-’127-0-0-1’-的-INSERT-和-UPDATE-的权限：" class="headerlink" title="我们再删除账户 ‘yangfan’@’127.0.0.1’ 的 INSERT 和 UPDATE 的权限："></a>我们再删除账户 ‘yangfan’@’127.0.0.1’ 的 INSERT 和 UPDATE 的权限：</h1><p>MariaDB [(none)]&gt; REVOKE INSERT, UPDATE ON test.* FROM ‘yangfan‘@’127.0.0.1’;</p>
+<h1 id="查看结果：-1"><a href="#查看结果：-1" class="headerlink" title="查看结果："></a>查看结果：</h1><p>MariaDB [(none)]&gt; SHOW GRANTS FOR ‘yangfan‘@’127.0.0.1’;<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+----------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Grants <span class="keyword">for</span> yangfan@127.0.0.1                                                                                   |</span><br><span class="line">+----------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| GRANT USAGE ON *.* TO <span class="string">'yangfan'</span>@<span class="string">'127.0.0.1'</span> IDENTIFIED BY PASSWORD <span class="string">'*F6131BD316F9043F5FE0E5B95F5713D6F86A157F'</span> |</span><br><span class="line">| GRANT SELECT ON `<span class="built_in">test</span>`.* TO <span class="string">'yangfan'</span>@<span class="string">'127.0.0.1'</span>                                                              |</span><br><span class="line">+----------------------------------------------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure></p>
+<h1 id="可以看到现在‘yangfan‘-’127-0-0-1’这个用户只有SELECT权限"><a href="#可以看到现在‘yangfan‘-’127-0-0-1’这个用户只有SELECT权限" class="headerlink" title="可以看到现在‘yangfan‘@’127.0.0.1’这个用户只有SELECT权限"></a>可以看到现在‘yangfan‘@’127.0.0.1’这个用户只有SELECT权限</h1><p>可以授予用户的权限由很多种。下面3张表即为权限的汇总。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">+-------------------------------------------------------------+</span><br><span class="line">|               数据库管理权限</span><br><span class="line">+-------------------+-----------------------------------------+</span><br><span class="line">|权限名	             |   权限所允许的操作</span><br><span class="line">|CREATE USER	    | 使用高级账户管理语句</span><br><span class="line">|FILE	            | 读、写 MariaDB 服务器主机上的文件</span><br><span class="line">|GRANT OPTION	    | 把账户权限授予其他账户</span><br><span class="line">|PROCESS	        | 查看在运行的线程的信息</span><br><span class="line">|RELOAD	            | 重新加载权限数据或更新日志及缓存</span><br><span class="line">|REPLICATION CLIENT	| 查询主/从服务器的运行地点</span><br><span class="line">|REPLICATION SLAVE	| 以复制的从服务器运行                      </span><br><span class="line">|SHOW DATBASES	    | 用 SHOW DATABASES 语句查看全部数据库名称    </span><br><span class="line">|SHUTDOWN	        | 关闭服务器                                </span><br><span class="line">|SUPER	            | 用 KILL 命令终止线程以及进行其他超级用户操作  </span><br><span class="line">+-------------------+----------------------------------------+</span><br><span class="line"></span><br><span class="line">+------------------------------------------------------------+</span><br><span class="line">|                  数据库对象操作权限</span><br><span class="line">+-------------------------+----------------------------------+</span><br><span class="line">|ALTER	                  |更改数据表或索引的定义</span><br><span class="line">|ALTER ROUTINE	          |更改或删除存储函数或存储过程</span><br><span class="line">|CREATE	                  |创建数据库或数据表</span><br><span class="line">|CRATE ROUTINE	          |创建存储函数或存储过程</span><br><span class="line">|CREATE TEMPORARY TABLE	  |用 TEMPORARY 关键字创建临时表</span><br><span class="line">|CREATE VIEW	          |创建视图</span><br><span class="line">|DELETE	                  |删除数据库中现有的数据行</span><br><span class="line">|DROP	                  |删除数据库、数据表或其他对象</span><br><span class="line">|EVENT	                  |为时间调度程序创建、删除或修改各种事件</span><br><span class="line">|EXECUTE        	      |执行存储函数或存储过程</span><br><span class="line">|INDEX	                  |创建或删除索引</span><br><span class="line">|INSERT	                  |往数据表中插入新数据行</span><br><span class="line">|LOCK TABLE	用 LOCK TABLE |语句明确地锁定数据表</span><br><span class="line">|REFERENCE	              |未使用（保留字）</span><br><span class="line">|SELECT	                  |检索数据表里的数据行</span><br><span class="line">|SHOW VIEW	              |查看视图的定义</span><br><span class="line">|TRGGER	                  |创建或删除触发器</span><br><span class="line">|UPDATE	                  |修改数据行</span><br><span class="line">+-------------------------+---------------------------------+</span><br><span class="line"></span><br><span class="line">+------------------------------------------------+</span><br><span class="line">|               其他权限                           |</span><br><span class="line">+-------------------+----------------------------+</span><br><span class="line">|ALL [PRIVILEGES]   |所有操作权限(但不包含 GRANT)    |</span><br><span class="line">|USAGE	            |一个特殊的“无权限”权限          |</span><br><span class="line">+-------------------+----------------------------+</span><br></pre></td></tr></table></figure></p>
+<p>配置MariaDB的字符集：<br>“”” MySQL在5.5.3版本之后增加了utf8mb4，向下兼容utf8。MariaDB的10.0版本之后<br>    默认使用utf8mb4作为Debian系列系统的默认字符集编码。utf8mb4的优点：支持最大字符长度为4字节。<br>    缺点：存储对多消耗一些空间，对于 CHAR 类型数据，utf8mb4 会多消耗一些空间，<br>    根据 Mysql 官方建议，使用 VARCHAR 替代 CHAR。<br>“””</p>
+<h1 id="查看字符集"><a href="#查看字符集" class="headerlink" title="查看字符集"></a>查看字符集</h1><p>MariaDB [(none)]&gt; show variables like “%character%”;show variables like “%collation%”;<br>+————————–+—————————-+<br>| Variable_name            | Value                      |<br>+————————–+—————————-+<br>| character_set_client     | utf8mb4                    |<br>| character_set_connection | utf8mb4                    |<br>| character_set_database   | utf8mb4                    |<br>| character_set_filesystem | binary                     |<br>| character_set_results    | utf8mb4                    |<br>| character_set_server     | utf8mb4                    |<br>| character_set_system     | utf8                       |<br>| character_sets_dir       | /usr/share/mysql/charsets/ |<br>+————————–+—————————-+<br>8 rows in set (0.00 sec)</p>
+<p>+———————-+——————–+<br>| Variable_name        | Value              |<br>+———————-+——————–+<br>| collation_connection | utf8mb4_general_ci |<br>| collation_database   | utf8mb4_general_ci |<br>| collation_server     | utf8mb4_general_ci |<br>+———————-+——————–+</p>
+<h1 id="修改字符集配置"><a href="#修改字符集配置" class="headerlink" title="修改字符集配置"></a>修改字符集配置</h1><h1 id="设置客户端："><a href="#设置客户端：" class="headerlink" title="设置客户端："></a>设置客户端：</h1><p>$ sudo vim /etc/mysql/mariadb.conf.d/50-mysql-clients.cnf</p>
+<p>[mysql]<br>default-character-set = utf8<br>“”” 这个命令会讲下列设置修改为utf编码：<br>    character_set_client<br>    character_set_connection<br>    character_set_results<br>    collation_connection<br>    相当于进入到mysql终端进行输入：<br>    MariaDB [(none)]&gt; SET NAMES ‘utf8’;<br>“””</p>
+<h1 id="进入数据库查看修改结果"><a href="#进入数据库查看修改结果" class="headerlink" title="进入数据库查看修改结果"></a>进入数据库查看修改结果</h1><p>MariaDB [(none)]&gt; show variables like “%character%”;show variables like “%collation%”;<br>+————————–+—————————-+<br>| Variable_name            | Value                      |<br>+————————–+—————————-+<br>| character_set_client     | utf8                       |<br>| character_set_connection | utf8                       |<br>| character_set_database   | utf8mb4                    |<br>| character_set_filesystem | binary                     |<br>| character_set_results    | utf8                       |<br>| character_set_server     | utf8mb4                    |<br>| character_set_system     | utf8                       |<br>| character_sets_dir       | /usr/share/mysql/charsets/ |<br>+————————–+—————————-+<br>8 rows in set (0.00 sec)</p>
+<p>+———————-+——————–+<br>| Variable_name        | Value              |<br>+———————-+——————–+<br>| collation_connection | utf8_general_ci    |<br>| collation_database   | utf8mb4_general_ci |<br>| collation_server     | utf8mb4_general_ci |<br>+———————-+——————–+</p>
+<h1 id="设置服务端"><a href="#设置服务端" class="headerlink" title="设置服务端"></a>设置服务端</h1><p>$ sudo vim /etc/mysql/mariadb.conf.d/50-server.cnf</p>
+<p>[mysqld]<br>character_set_server = utf8<br>collation-server     = utf8_general_ci</p>
+<h1 id="创建数据库的时候指定编码格式"><a href="#创建数据库的时候指定编码格式" class="headerlink" title="创建数据库的时候指定编码格式"></a>创建数据库的时候指定编码格式</h1><p>MariaDB [(none)]&gt; create database db_name character set utf8;</p>
+<h1 id="创建表的时候指定编码格式"><a href="#创建表的时候指定编码格式" class="headerlink" title="创建表的时候指定编码格式"></a>创建表的时候指定编码格式</h1><p>MariaDB [(none)]&gt; create table db_name(<br>    -&gt; id int(11),<br>    -&gt; name varchar(50) character set utf8,<br>    -&gt; class_time int(11),<br>    -&gt; PRIMARY KEY(id)<br>    -&gt; )DEFAULT CHARSET=utf8;</p>
+<h1 id="对已经创建完成的表或者数据库通过ALTER进行修改"><a href="#对已经创建完成的表或者数据库通过ALTER进行修改" class="headerlink" title="对已经创建完成的表或者数据库通过ALTER进行修改"></a>对已经创建完成的表或者数据库通过ALTER进行修改</h1><h1 id="修改某一个数据库"><a href="#修改某一个数据库" class="headerlink" title="修改某一个数据库"></a>修改某一个数据库</h1><p>MariaDB [(none)]&gt; ALTER database db_name character set utf8;</p>
+<h1 id="修改某一个表"><a href="#修改某一个表" class="headerlink" title="修改某一个表"></a>修改某一个表</h1><p>MariaDB [(none)]&gt; ALTER table table_name character set utf8;</p>
+<h1 id="对单个编码设置进行设置，如：character-set-database"><a href="#对单个编码设置进行设置，如：character-set-database" class="headerlink" title="对单个编码设置进行设置，如：character_set_database"></a>对单个编码设置进行设置，如：character_set_database</h1><p>MariaDB [(none)]&gt; set character_set_database=utf8;<br>Query OK, 0 rows affected (0.00 sec)</p>
+<p>查看数据库版本<br>$ mysql -V</p>
+<p>数据库安装和初步配置参考如下：<br><a href="https://blog.csdn.net/dream361/article/details/65445168" target="_blank" rel="noopener">https://blog.csdn.net/dream361/article/details/65445168</a><br><a href="https://blog.csdn.net/zhezhebie/article/details/73549741" target="_blank" rel="noopener">https://blog.csdn.net/zhezhebie/article/details/73549741</a></p>
+<p>数据库用户管理参考如下：<br><a href="https://www.cnblogs.com/conanwang/p/5932579.html" target="_blank" rel="noopener">https://www.cnblogs.com/conanwang/p/5932579.html</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-02-28T09:53:42.237Z" itemprop="dateUpdated">2019-02-28 17:53:42</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2019/02/28/MariaDB安装和部署/" target="_blank" rel="external">http://yoursite.com/2019/02/28/MariaDB安装和部署/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="http://yoursite.com">
+            <img src="/img/avatar.jpg" alt="Xiaotiepi">
+            Xiaotiepi
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/02/28/MariaDB安装和部署/&title=《MariaDB安装和部署》 — 嘟嘟嘟嘟嘟&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/02/28/MariaDB安装和部署/&title=《MariaDB安装和部署》 — 嘟嘟嘟嘟嘟&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/02/28/MariaDB安装和部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MariaDB安装和部署》 — 嘟嘟嘟嘟嘟&url=http://yoursite.com/2019/02/28/MariaDB安装和部署/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/02/28/MariaDB安装和部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/02/28/测试文章/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">测试文章</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check" data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Xiaotiepi &copy; 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/02/28/MariaDB安装和部署/&title=《MariaDB安装和部署》 — 嘟嘟嘟嘟嘟&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/02/28/MariaDB安装和部署/&title=《MariaDB安装和部署》 — 嘟嘟嘟嘟嘟&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/02/28/MariaDB安装和部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MariaDB安装和部署》 — 嘟嘟嘟嘟嘟&url=http://yoursite.com/2019/02/28/MariaDB安装和部署/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/02/28/MariaDB安装和部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/02/28/MariaDB安装和部署/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
